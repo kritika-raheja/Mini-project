@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sticky Notes</title>
+
+<style>
+
+body{
+font-family: Arial;
+padding:40px;
+}
+
+input{
+padding:8px;
+}
+
+button{
+padding:8px;
+margin-left:5px;
+}
+
+li{
+background:yellow;
+padding:10px;
+margin:10px 0;
+list-style:none;
+width:250px;
+display:flex;
+justify-content:space-between;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Sticky Notes</h1>
+
+<input id="noteInput" placeholder="Write a note">
+<button id="addNote">Add Note</button>
+
+<ul id="notesList"></ul>
+
+<script>
+
+let input = document.querySelector("#noteInput");
+let button = document.querySelector("#addNote");
+let list = document.querySelector("#notesList");
+
+let notes = JSON.parse(localStorage.getItem("notes")) || [];
+
+function showNotes(){
+
+list.innerHTML="";
+
+notes.forEach((note,index)=>{
+
+let li = document.createElement("li");
+li.innerText = note;
+
+let delBtn = document.createElement("button");
+delBtn.innerText="Delete";
+
+delBtn.onclick=function(){
+
+notes.splice(index,1);
+
+localStorage.setItem("notes",JSON.stringify(notes));
+
+showNotes();
+
+};
+
+li.appendChild(delBtn);
+
+list.appendChild(li);
+
+});
+
+}
+
+button.addEventListener("click",function(){
+
+if(input.value==="") return;
+
+notes.push(input.value);
+
+localStorage.setItem("notes",JSON.stringify(notes));
+
+input.value="";
+
+showNotes();
+
+});
+
+showNotes();
+
+</script>
+
+</body>
+</html>
